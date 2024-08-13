@@ -1,5 +1,62 @@
 #include "argparse.h"
 
+int countopts(int argc, char** argv) // counts any options given by - or --
+{
+    int i;
+    int count;
+
+    i = 0;
+    count = 0;
+    while (i < argc)
+    {
+        if (!strncmp(argv[i], "-", 1) || !strncmp(argv[i], "--", 2))
+            count++;
+        i++;
+    }
+    return (count);
+}
+
+char** getopts(int argc, char** argv)
+{
+    int i;
+    int j;
+
+    char** opts = malloc(countopts(argc, argv) * sizeof(char*));
+    if (opts == NULL)
+        goto error;
+    i = 0;
+    j = 0;
+    while (i < argc)
+    {
+        if (!strncmp(argv[i], "-", 1) || !strncmp(argv[i], "--", 2))
+        {
+            if (!strncmp(argv[i], "-", 1) && !(argv[i][1] == '-'))
+            {
+
+            }
+            opts[j] = malloc()
+            
+            // strcpy(opts[j], argv[i]);
+            // if (opts[j] == NULL)
+            //     goto error;
+            j++;
+        }
+        i++;
+    }
+    return (opts);
+
+    error:
+        int k = 0;
+
+        while (k < countopts(argc, argv))
+        {
+            free(opts[k]);  
+            k++;
+        }
+        free(opts);
+        return (NULL);
+}
+
 int newarg(const char* longname, const char* shortname, const char* description, int argcount)
 {
     if (!strcmp(longname, "\0") && !strcmp(shortname, "\0"))
