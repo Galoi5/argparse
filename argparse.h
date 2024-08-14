@@ -1,36 +1,42 @@
 #ifndef ARGPARSE_H
 #define ARGPARSE_H
 
-typedef struct arg
-{
-    const char* long_name;
-    const char* short_name;
-    const char* description;
-    int arg_count; // the number of folliwng arguments the option depends on. 0 is none
-} arg;
-
-typedef struct argparse
-{
-    const char* prog_name;
-    const char* version;
-    const char* author;
-    const char* help;
-    arg** args;
-} argparse;
-
+/* includes */
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-int countopts(int argc, char** argv);
-char** getopts(int argc, char** argv);
+/* error codes and global errno*/
+#define NOERROR     0
+#define MALLOCERROR 1
+#define OPTNONAME   2
+#define OPTNODESC   3
+int errno = 0;
+
+/* option struct */
+typedef struct opt
+{
+    const char* long_name;
+    const char* short_name;
+    const char* description;
+    int arg_count; 
+    struct opt *next;
+} opt;
+
+/* util functions */
+int _isvalidopt(char* opt); //returns 1 if opt is valid and 0 if not
+char* _strip(char* opt);    //once option is valid, strip the - or --
+int _countopts(int argc, char** argv); //count number of options
+char** _getopts(int argc, char** argv); //get options
 
 
-// util functions
+
+int _validateargs(char** argv, char** optlst);
 
 
-int newarg(const char* longname, const char* shortname, const char* description, int argcount);
-int parse();
+/* parse arguments and options */
+char** parse(int argc, char** argv);
+opt* newopt(const char* longname, const char* shortname, const char* description, int argcount); //register new option
 int killparse(); //free everything
 
 #endif
