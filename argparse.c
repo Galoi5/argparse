@@ -2,7 +2,7 @@
 
 int _isvalidopt(char* opt)
 {
-    if ((opt[0] == '-' && opt[1] != '-' && opt[1] != '\0') || (!strncmp(opt, "--", 2) && opt[2] != '\0'))
+    if ((opt[0] == '-' && opt[1] != '-' && opt[1] != '\0') || (!strncmp(opt, "--", 2) && opt[2] != '\0' && opt[2] != '-'))
         return (1);
     return (0);
 }
@@ -49,9 +49,10 @@ char** _getopts(int argc, char** argv)
     int optcount;
     int i;
     int j;
-    int k;
-    
+
     optcount = _countopts(argc, argv);
+    if (optcount == 0)
+        return NULL;
     rawopts = malloc(optcount * sizeof(char*));
     if (rawopts == NULL)
         goto mallocerror;
@@ -68,17 +69,16 @@ char** _getopts(int argc, char** argv)
         }
         i++;
     }
+    return rawopts;
 
-    mallocerror:
-        k = 0;
-        while (k < optcount)
-        {
-            free(rawopts[k]);
-            k++;
-        }
-        free(rawopts);
-        errno = MALLOCERROR;
-        return (NULL);
+mallocerror:
+    for (int k = 0; k < j; k++)
+    {
+        free(rawopts[k]);
+    }
+    free(rawopts);
+    errno = MALLOCERROR;
+    return NULL;
 }
 
 char** parse(int argc, char** argv)
