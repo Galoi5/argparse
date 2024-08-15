@@ -24,10 +24,12 @@ typedef struct opt
 } opt;
 
 /* util functions */
-int _isvalidopt(char* opt); //returns 1 if opt is valid and 0 if not
-char* _strip(char* opt);    //once option is valid, strip the - or --
-int _countopts(int argc, char** argv); //count number of options
+int _isvalidopt(char* opt);             //returns 1 if opt is valid and 0 if not
+char* _strip(char* opt);                //once option is valid, strip the - or --
+int _countopts(int argc, char** argv);  //count number of options
 char** _getopts(int argc, char** argv); //get options
+opt* _createopt();
+opt* _addopt();
 
 
 
@@ -35,8 +37,9 @@ int _validateargs(char** argv, char** optlst);
 
 
 /* parse arguments and options */
-char** parse(int argc, char** argv);
 opt* newopt(const char* longname, const char* shortname, const char* description, int argcount); //register new option
+opt* initopts(); // creates help, usage, add author, package name and everything else
+char** parse(int argc, char** argv);
 int killparse(); //free everything
 
 #endif

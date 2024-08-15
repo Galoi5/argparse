@@ -81,6 +81,23 @@ mallocerror:
     return NULL;
 }
 
+opt* _createopt(const char* longname, const char* shortname, const char* description, int argcount)
+{
+    opt* new;
+
+    new = (opt*)malloc(sizeof(opt));
+    new->long_name = (const char*)malloc((strlen(longname) + 1) * sizeof(char));
+    new->short_name = (const char*)malloc((strlen(shortname) + 1) * sizeof(char));
+    new->description = (const char*)malloc((strlen(description) + 1) * sizeof(char));
+    new->arg_count = argcount;
+    new->next = NULL;
+    return (new);
+}
+
+opt* _addopt();
+
+
+
 char** parse(int argc, char** argv)
 {
 
